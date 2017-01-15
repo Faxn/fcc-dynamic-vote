@@ -1,0 +1,21 @@
+<h1>{{title}}</h1>
+<span> By {{author}}</span>
+
+<form action='/poll/{{title}}' method=POST>
+    <select name=option>
+    {{#each options}}
+        <option value={{option}}>{{option}}</option>
+    {{/each}}
+    </select>
+    <br>
+    <input type=submit value=Vote></input>
+</form>
+
+<ul>
+{{#each options}}
+        <li value={{option}}>{{option}}:{{votes}}</li>
+{{/each}}
+</ul>
+
+<div>
+</div>

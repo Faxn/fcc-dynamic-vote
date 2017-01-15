@@ -3,29 +3,18 @@ app = express()
 nedb = require('nedb')
 bodyParser = require('body-parser')
 
-app.set('view engine', 'hbs');
 
-db_polls = new nedb({filename: 'data/polls', autoload:true})
-db_users = new nedb({filename: 'data/users', autoload:true})
+//app.set('view engine', 'hbs');
+app.set('view engine', 'html');
+app.engine('html', require('hbs').__express);
+
+
+db_polls = new nedb({filename: 'data/polls.json', autoload:true})
+db_users = new nedb({filename: 'data/users.json', autoload:true})
 
 //Attach body parsing middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-//Mockup data. Delete eventualy
-polls = [
-    { name:'who was the murderer'},
-    { name:'best character'}
-]
-
-poll = {
-    options : [
-                {option:'Mr pink', votes: 1},
-                {option:'The sun', votes: 6},
-                {option:'Bartlby', votes: 20}
-              ],
-    voters : []
-}
 
 
 app.get('/', function (req, res, next){
@@ -41,7 +30,11 @@ app.get('/new-poll', function(req, res, next){
 
 app.post('/new-poll', function(req, res, next){
     newPoll = req.body;
-    newPoll.options = newPoll.options.split('\n');
+    options = newPoll.options.split(/\s*\n\s*/);
+    newPoll.options = {}
+    for(i in options){
+        newPoll.options[options[i]] = {option:options[i], votes:0}
+    }
     db_polls.insert(newPoll, function(err, insertedPoll){
         res.json({newPoll, err, insertedPoll});
     })
@@ -50,14 +43,36 @@ app.post('/new-poll', function(req, res, next){
 
 app.get('/poll/:id', function(req, res, next){
     db_polls.find({title:req.params.id}, function(err, poll){
-        if(!err){
-            console.log(poll)
-            res.render('poll', poll[0])
-        } else {
+        if(err){
+            res.setStatus(500)
             res.json(err)            
+        } else if (poll.length == 0){
+            res.sendStatus(404)
+        } else {
+            res.render('poll', poll[0])
         }
     })  
 });
+
+app.post('/poll/:id', function(req, res, next){
+    db_polls.find({title:req.params.id}, function(err, poll){
+        if(err){
+            res.status(500)
+            res.json(err)            
+        } else if (poll.length == 0){
+            res.sendStatus(404)
+        } else {
+            poll = poll[0]
+            console.log(poll)
+            console.log(req.body)
+            poll.options[req.body.option].votes++
+            db_polls.update({_id:poll._id}, poll, {}, function(err){
+                res.status(200)
+                res.json({err})
+            })
+        }
+    })
+})
 
 
 var port;
