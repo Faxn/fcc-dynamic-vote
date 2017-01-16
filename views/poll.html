@@ -1,12 +1,14 @@
+{{>header}}
+
 <h1>{{title}}</h1>
 <span> By {{author}}</span>
 
 <form action='/poll/{{title}}' method=POST>
-    <select name=option>
+    
     {{#each options}}
-        <option value={{option}}>{{option}}</option>
+        <input type=radio name='option' value={{option}}>{{option}}</option>
     {{/each}}
-    </select>
+    
     <br>
     <input type=submit value=Vote></input>
 </form>
