@@ -1,7 +1,9 @@
-express = require('express')
-app = express()
-nedb = require('nedb')
-bodyParser = require('body-parser')
+'use strict';
+
+var express = require('express')
+var app = express()
+var nedb = require('nedb')
+var bodyParser = require('body-parser')
 
 
 //app.set('view engine', 'hbs');
@@ -9,8 +11,8 @@ app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 
 
-db_polls = new nedb({filename: 'data/polls.json', autoload:true})
-db_users = new nedb({filename: 'data/users.json', autoload:true})
+var db_polls = new nedb({filename: 'data/polls.json', autoload:true})
+var db_users = new nedb({filename: 'data/users.json', autoload:true})
 
 //Attach body parsing middleware
 app.use(bodyParser.json());
@@ -78,5 +80,5 @@ app.post('/poll/:id', function(req, res, next){
 var port;
 port = process.env.PORT || 8080
 app.listen(port, function () {
-  console.log('Example app listening on port: '+port)
+  console.log('App listening on port: '+port)
 })
