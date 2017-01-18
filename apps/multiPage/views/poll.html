@@ -3,7 +3,7 @@
 <h1>{{title}}</h1>
 <span> By {{author}}</span>
 
-<form action='/poll/{{title}}' method=POST>
+<form action='{{baseUrl}}/poll/{{title}}' method=POST>
     
     {{#each options}}
         <input type=radio name='option' value={{option}}>{{option}}</option>

@@ -1,0 +1,10 @@
+{{>header}}
+<body>
+
+{{#each polls}} 
+    <a href='{{../baseUrl}}/poll/{{title}}'> {{title}}</a><br> 
+{{/each}}
+
+<br>
+<a href='{{baseUrl}}/new-poll'>Make a New Poll</a>
+</body>
