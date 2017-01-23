@@ -29,10 +29,14 @@ app.get('/new-poll', function(req, res, next){
 app.post('/new-poll', function(req, res, next){
     var newPoll = req.body;
     var options = newPoll.options.split(/\s*\n\s*/);
-    newPoll.options = {}
+    newPoll.options = []
+    newPoll.votes = []
+    newPoll.voters = {}
     for(var i in options){
         if(options[i]){
-            newPoll.options[options[i]] = {option:options[i], votes:0}
+            //newPoll.options[options[i]] = {option:options[i], votes:0}
+            newPoll.options.push(options[i])
+            newPoll.votes.push(0)
         }
     }
     db_polls.insert(newPoll, function(err, insertedPoll){
@@ -69,7 +73,7 @@ app.post('/poll/:id', function(req, res, next){
             res.sendStatus(404)
         } else {
             poll = poll[0]
-            poll.options[req.body.option].votes++
+            poll.votes[req.body.option]++
             db_polls.update({_id:poll._id}, poll, {}, function(err){
                 if(err){
                     res.status(500)

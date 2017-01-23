@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function(db_polls, db_users){
     
 //Set up express  
@@ -50,18 +52,28 @@ app.post('/poll', function(req, res, next){
     
     //If the choices were passed as a string seperate them
     if(typeof(req.body.options) == "string"){
-        var options = req.body.options.split(/\s*\n\s*/);
+        let options = req.body.options.split(/\s*\n\s*/);
         newPoll.options = []
-        for(var i in options){
+        for(let i in options){
             if(options[i]){
-                newPoll.options.push({option:options[i], votes:0, voters:[]})
+                newPoll.options.push(options[i])
             }
         }
-    }else if (typeof(req.body.options) == "array") {
+    }else if (req.body.options instanceof Array) {
         newPoll.options = req.body.options
     } else {
         throw new Error("No valid options provided for poll")
     }
+    
+    //Initialize the voters
+    newPoll.votes = Array(newPoll.options.length)
+    for(let i = newPoll.options.length; i;i--){
+        newPoll.votes[i] = 0;
+    }
+    
+    //Initilize the list of users who have voted.
+    newPoll.voters = {}
+    
     
     db_polls.insert(newPoll, function(err, insertedPoll){
         res.status(201);

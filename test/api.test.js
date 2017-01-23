@@ -28,6 +28,7 @@ chai.use(chaiHttp);
 const server = require('../src/api')(db_polls, db_users);
 
 
+
 //Our example poll
 var examplePoll = {
     title:"Test Poll 1",
@@ -61,6 +62,7 @@ describe('Polls-Api', () => {
       it('Should accept a post request', (done) => {
           chai.request(server)
             .post('/poll')
+            .type('form')
             .send(examplePoll)
             .end((err, res) => {
                 res.should.have.status(201)

@@ -6,7 +6,7 @@
 <form action='{{baseUrl}}/poll/{{_id}}' method=POST>
     
     {{#each options}}
-        <input type=radio name='option' value={{option}}>{{option}}</option>
+        <input type=radio name='option' value={{@index}}>{{this}}</option>
     {{/each}}
     
     <br>
@@ -15,7 +15,7 @@
 
 <ul>
 {{#each options}}
-        <li value={{option}}>{{option}}:{{votes}}</li>
+        <li>{{this}}:{{lookup ../votes @index}}</li>
 {{/each}}
 </ul>
 
