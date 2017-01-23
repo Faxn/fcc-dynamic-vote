@@ -34,25 +34,38 @@ app.get(["/poll", "/poll/:id"], function(req, res, next){
 })
 
 app.post('/poll', function(req, res, next){
-    var newPoll = req.body;
+    var newPoll = {};
     
-    //prevent overwriting an existing poll
-    delete newPoll._id
+    //
+    if(req.body.title == undefined){
+        throw new Error("'title' Not Provided")
+    }
+    newPoll.title = req.body.title;
+    
+    
+    if(req.body.author == undefined){
+        throw new Error("'author' Not Provided")
+    }
+    newPoll.author = req.body.author;
     
     //If the choices were passed as a string seperate them
-    if(typeof(newPoll.options) == "string"){
-        var options = newPoll.options.split(/\s*\n\s*/);
+    if(typeof(req.body.options) == "string"){
+        var options = req.body.options.split(/\s*\n\s*/);
         newPoll.options = []
         for(var i in options){
             if(options[i]){
                 newPoll.options.push({option:options[i], votes:0, voters:[]})
             }
         }
+    }else if (typeof(req.body.options) == "array") {
+        newPoll.options = req.body.options
+    } else {
+        throw new Error("No valid options provided for poll")
     }
     
     db_polls.insert(newPoll, function(err, insertedPoll){
         res.status(201);
-        res.json({newPoll, err, insertedPoll});
+        res.json(insertedPoll);
         
     })
 })

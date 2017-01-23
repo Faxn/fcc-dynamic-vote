@@ -37,7 +37,7 @@ app.post('/new-poll', function(req, res, next){
     }
     db_polls.insert(newPoll, function(err, insertedPoll){
         
-        res.append('Refresh', "0; " + req.baseUrl + "poll/" + insertedPoll.title);
+        res.append('Refresh', "0; " + req.baseUrl + "/poll/" + insertedPoll._id);
         res.json({newPoll, err, insertedPoll});
         
     })
@@ -45,10 +45,9 @@ app.post('/new-poll', function(req, res, next){
 })
 
 app.get('/poll/:id', function(req, res, next){
-    db_polls.find({title:req.params.id}, function(err, poll){
+    db_polls.find({_id:req.params.id}, function(err, poll){
         if(err){
-            res.setStatus(500)
-            res.json(err)            
+            return next(err);
         } else if (poll.length == 0){
             res.sendStatus(404)
         } else {
@@ -60,10 +59,12 @@ app.get('/poll/:id', function(req, res, next){
 });
 
 app.post('/poll/:id', function(req, res, next){
-    db_polls.find({title:req.params.id}, function(err, poll){
+    if(req.body.option == undefined){
+        throw new Error("No option chosen!")
+    }    
+    db_polls.find({_id:req.params.id}, function(err, poll){
         if(err){
-            res.status(500)
-            res.json(err)            
+            return next(err);      
         } else if (poll.length == 0){
             res.sendStatus(404)
         } else {
