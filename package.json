@@ -1,6 +1,6 @@
 {
   "name": "fcc-dynamic-vote",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "url": "s"
   },
   "author": "Blake Curry",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
