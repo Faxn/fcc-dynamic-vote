@@ -1,4 +1,4 @@
-module.exports = function(db_poll, db_user){
+module.exports = function(db_polls, db_users){
     
 //Set up express  
 var express = require('express')
@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/polls", function(req, res, next){
-    db_poll.find({}, {title: 1}, function(err, docs){
+    db_polls.find({}, {title: 1}, function(err, docs){
         if(!err){
             res.json(docs)
         } else {
@@ -23,7 +23,7 @@ app.get("/polls", function(req, res, next){
 app.get(["/poll", "/poll/:id"], function(req, res, next){
     var query = {}
     query._id = req.params.id || req.query.id;
-    db_poll.findOne(query, function(err, poll){
+    db_polls.findOne(query, function(err, poll){
         if(!err){
             res.json(poll);
         } else {
@@ -50,7 +50,7 @@ app.post('/poll', function(req, res, next){
         }
     }
     
-    db_poll.insert(newPoll, function(err, insertedPoll){
+    db_polls.insert(newPoll, function(err, insertedPoll){
         res.status(201);
         res.json({newPoll, err, insertedPoll});
         
