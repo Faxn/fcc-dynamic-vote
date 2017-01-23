@@ -27,7 +27,7 @@ app.get(["/poll", "/poll/:id"], function(req, res, next){
         if(!err){
             res.json(poll);
         } else {
-            res.setStatus(500)
+            res.status(500)
             res.json(err)
         }
     })
@@ -42,16 +42,16 @@ app.post('/poll', function(req, res, next){
     //If the choices were passed as a string seperate them
     if(typeof(newPoll.options) == "string"){
         var options = newPoll.options.split(/\s*\n\s*/);
-        newPoll.options = {}
+        newPoll.options = []
         for(var i in options){
             if(options[i]){
-                newPoll.options[options[i]] = {option:options[i], votes:0}
+                newPoll.options.push({option:options[i], votes:0, voters:[]})
             }
         }
     }
     
-    db_polls.insert(newPoll, function(err, insertedPoll){
-        
+    db_poll.insert(newPoll, function(err, insertedPoll){
+        res.status(201);
         res.json({newPoll, err, insertedPoll});
         
     })
