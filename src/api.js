@@ -82,13 +82,26 @@ app.post('/poll', function(req, res, next){
     })
 })
 
+
+//the path to send a vote
 app.patch("/poll/:id", function(req, res, next){
     
+    let option = req.body.option
+    if(option == undefined){
+        throw(new Error("No option specified."))
+    }
+    
+    //build the uodate object.
+    let update_obj = {$inc: {} }
+    update_obj.$inc["votes."+option] = 1
+    
+    db_polls.update({_id:req.params.id}, update_obj, {}, (err, poll) => {
+        if(err){
+            throw err;
+        }
+        res.send()
+    })
 })
-
-
-
-
 
 
 return app;

@@ -96,6 +96,25 @@ describe('Polls-Api', () => {
                 done();
             });
       });
+      it("should accept a vote", (done) => {
+          chai.request(server)
+            .patch('/poll/'+insertedId)
+            .send({option: 1})
+            .end((err, res) => {
+                res.should.have.status(200)
+                done();
+            });
+      });
+      it("should have recorded out vote", (done) => {
+          chai.request(server)
+            .get('/poll/'+insertedId)
+            .end((err, res) => {
+                res.should.have.status(200)
+                res.body._id.should.be.eql(insertedId)
+                res.body.votes[1].should.be.eql(1)
+                done();
+            });
+      });
   });
 
 });
