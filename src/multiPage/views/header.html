@@ -3,6 +3,12 @@
 
 
 <div class="container-fluid">
-    <a href='{{baseUrl}}/'>Index</a>
-    <a href='{{baseUrl}}/new-poll'>Make a New Poll</a>
+    <a class="btn btn-default" href='{{baseUrl}}/'>Index</a>
+    <a class="btn btn-default" href='{{baseUrl}}/new-poll'>Make a New Poll</a>
+    {{#if user}}
+        <span>Hi {{user.name}}</span>
+    {{else}}
+        <a class="btn btn-default" href='/auth/twitter'>Sign In with Twitter</a>
+    {{/if}}
+    
 </div>

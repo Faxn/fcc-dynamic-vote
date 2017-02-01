@@ -17,13 +17,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res, next){
     db_polls.find({}, function(err, polls){
-        res.render('index', {polls, baseUrl:req.baseUrl});
+        res.render('index', {polls, baseUrl:req.baseUrl, user:req.user});
     })
     
 })
 
 app.get('/new-poll', function(req, res, next){
-    res.render('new-poll', {baseUrl:req.baseUrl})
+    res.render('new-poll', {baseUrl:req.baseUrl, user:req.user})
 })
 
 app.post('/new-poll', function(req, res, next){
@@ -56,6 +56,7 @@ app.get('/poll/:id', function(req, res, next){
             res.sendStatus(404)
         } else {
             var ctx = poll[0];
+            ctx.user= req.user
             ctx.baseUrl = req.baseUrl
             res.render('poll', ctx)
         }
@@ -87,7 +88,10 @@ app.post('/poll/:id', function(req, res, next){
         }
     })
 })
-    
-return app;
 
+
+
+
+
+return app;
 }
