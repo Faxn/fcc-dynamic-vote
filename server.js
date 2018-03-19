@@ -28,7 +28,7 @@ const TwitterStrategy = require('passport-twitter').Strategy
 passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: "http://halberd.zapto.org:"+process.env.PORT+"/auth/twitter/callback"
+    callbackURL: process.env.URL+":"+process.env.PORT+"/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
       var user = {id:profile.id, name:profile.displayName}
