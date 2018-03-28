@@ -4,7 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "client": "cd client && npm start",
+    "server": "node server.js",
+    "start": "concurrently --kill-others-on-fail \"npm run-script server\" \"npm run-script client\""
   },
   "repository": {
     "type": "git",
@@ -14,6 +17,7 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "dotenv": "^5.0.1",
     "express": "^4.14.0",
     "express-session": "^1.15.0",
     "hbs": "^4.0.1",
@@ -26,6 +30,7 @@
     "chai-http": "^3.0.0",
     "grunt": "^1.0.1",
     "mocha": "^3.5.3",
-    "supertest": "^2.0.1"
+    "supertest": "^2.0.1",
+    "concurrently": "^3.5.0"
   }
 }

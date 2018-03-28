@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config()
 var express = require('express')
 var app = express()
 
@@ -28,7 +29,7 @@ const TwitterStrategy = require('passport-twitter').Strategy
 passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: process.env.URL+":"+process.env.PORT+"/auth/twitter/callback"
+    callbackURL: "http://"+process.env.URL+":"+process.env.PORT+"/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
       var user = {id:profile.id, name:profile.displayName}
@@ -69,9 +70,9 @@ app.get('/', function(req,res){
 
 var port;
 port = process.env.PORT || 8080
+
 app.listen(port, function () {
   console.log('App listening on port: '+port)
 })
-
 
 module.exports = app; //Required for testing
